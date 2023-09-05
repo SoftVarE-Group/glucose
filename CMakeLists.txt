@@ -20,5 +20,6 @@ add_library(glucose
 
 target_link_libraries(glucose ZLIB::ZLIB)
 
-add_executable(glucose-simp EXCLUDE_FROM_ALL simp/Main.cc)
-target_link_libraries(glucose-simp glucose)
+add_executable(binary EXCLUDE_FROM_ALL simp/Main.cc)
+set_target_properties(binary PROPERTIES OUTPUT_NAME glucose)
+target_link_libraries(binary glucose)
