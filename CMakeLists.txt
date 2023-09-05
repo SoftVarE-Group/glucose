@@ -12,7 +12,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
 add_library(glucose
-    core/Main.cc
     core/Solver.cc
     simp/SimpSolver.cc
     utils/Options.cc
@@ -21,5 +20,5 @@ add_library(glucose
 
 target_link_libraries(glucose ZLIB::ZLIB)
 
-add_executable(glucose-simp simp/Main.cc)
+add_executable(glucose-simp EXCLUDE_FROM_ALL simp/Main.cc)
 target_link_libraries(glucose-simp glucose)
