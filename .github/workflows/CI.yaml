@@ -17,10 +17,24 @@ jobs:
             cxx: g++
           - cc: clang
             cxx: clang++
+        shell:
+          - bash
         exclude:
           - os: macos
             compiler: { cc: gcc, cxx: g++ }
+        include:
+          - os: windows
+            compiler: { cc: gcc, cxx: g++ }
+            shell: msys2
+            msystem: ucrt64
+          - os: windows
+            compiler: { cc: clang, cxx: clang++ }
+            shell: msys2
+            msystem: clang64
     runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: ${{ matrix.shell }} {0}
     env:
       CC: ${{ matrix.compiler.cc }}
       CXX: ${{ matrix.compiler.cxx }}
@@ -31,6 +45,16 @@ jobs:
         if: ${{ matrix.os == 'macos' }}
         run: |
           echo "ZLIB_ROOT=$(brew --prefix zlib)" >> $GITHUB_ENV
+      - name: Install dependencies
+        if: ${{ matrix.os == 'windows' }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: ${{ matrix.msystem }}
+          update: true
+          pacboy: >-
+            toolchain:p
+            cmake:p
+            ninja:p
       - name: Configure
         run: cmake -B build
       - name: Build
